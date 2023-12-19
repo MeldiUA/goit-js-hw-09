@@ -12,22 +12,24 @@ let feedback ={
     message: "",
 };
 
-try{
-    feedback = JSON.parse(localStorage.getItem(localStorageKey));
-    emailInput.value = feedback.email;
-    messageInput.value = feedback.message;
-}
-catch(error){
-    console.log(error.message);
-}
-
+document.addEventListener("DOMContentLoaded", ()=> {
+    const valueLocalStorage = localStorage.getItem(localStorageKey);
+    try {
+        if(valueLocalStorage) {
+        feedback = JSON.parse(valueLocalStorage);
+        emailInput.value = feedback.email;
+        messageInput.value = feedback.message;}
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 feedbackForm.addEventListener("input", (event) => {
-    if(event.target === emailInput){
-        feedback.email = event.target.value.trim();
-    }
-    else{
-        feedback.message = event.target.value.trim();
+    feedback[event.target.name] = event.target.value.trim();
+    try {
+        localStorage.setItem(localStorageKey, JSON.stringify(feedback))
+    } catch (error) {
+        console.log(error.message);
     }
 })
 
@@ -36,8 +38,9 @@ feedbackForm.addEventListener("input", (event) => {
 feedbackForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if(feedback.email && feedback.message){
-        localStorage.setItem(localStorageKey, JSON.stringify(feedback));
+        console.log(feedback);
         feedbackForm.reset();
+        localStorage.clear();
     }
     else{alert("ERROR, set a fields");}
 })
