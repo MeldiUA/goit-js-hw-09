@@ -39,8 +39,10 @@ feedbackForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if(feedback.email && feedback.message){
         console.log(feedback);
+        feedback.email = "";
+        feedback.message = "";
         feedbackForm.reset();
-        localStorage.clear();
+        localStorage.removeItem(localStorageKey);
     }
     else{alert("ERROR, set a fields");}
 })
